@@ -39,6 +39,15 @@ ADD `multi` INT( 1 ) NOT NULL ;
 ALTER TABLE /*$wgDBprefix*/poll 
 ADD `ip` INT( 1 ) NOT NULL ;
 
+ALTER TABLE /*$wgDBprefix*/poll 
+ADD `runtime` INT( 10 ) NOT NULL ;
+
+ALTER TABLE /*$wgDBprefix*/poll 
+ADD `starttime` INT( 30 ) NOT NULL ;
+
+ALTER TABLE /*$wgDBprefix*/poll 
+ADD `end` INT( 1 ) NOT NULL ;
+
 
 -- New fields for poll_answer
 

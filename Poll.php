@@ -82,6 +82,9 @@ function efPollSchemaUpdates( $updater = null ) {
 			$wgExtNewFields[] = array( 'poll', 'dis', "$base/archives/patch-dis.sql" ); // Add dis
 			$wgExtNewFields[] = array( 'poll', 'multi', "$base/archives/patch-multi.sql" ); // Add multi
 			$wgExtNewFields[] = array( 'poll', 'ip', "$base/archives/patch-ip.sql" ); // Add ip
+			$wgExtNewFields[] = array( 'poll', 'runtime', "$base/archives/patch-runtime.sql" ); // Add runtime
+			$wgExtNewFields[] = array( 'poll', 'starttime', "$base/archives/patch-starttime.sql" ); // Add starttime
+			$wgExtNewFields[] = array( 'poll', 'end', "$base/archives/patch-end.sql" ); // Add end
 		
 			// "poll_answer"-Table: The answer of the users
 			$wgExtNewTables[] = array( 'poll_answer', "$base/archives/Poll-answer.sql" ); // Initial answer tables
@@ -100,6 +103,9 @@ function efPollSchemaUpdates( $updater = null ) {
 			$updater->addExtensionUpdate( array( 'addField', 'poll', 'dis', "$base/archives/patch-dis.sql", true ) ); // Add dis
 			$updater->addExtensionUpdate( array( 'addField', 'poll', 'multi', "$base/archives/patch-multi.sql", true ) ); // Add multi
 			$updater->addExtensionUpdate( array( 'addField', 'poll', 'ip', "$base/archives/patch-ip.sql", true ) ); // Add ip
+			$updater->addExtensionUpdate( array( 'addField', 'poll', 'runtime', "$base/archives/patch-runtime.sql", true ) ); // Add runtime
+			$updater->addExtensionUpdate( array( 'addField', 'poll', 'starttime', "$base/archives/patch-starttime.sql", true ) ); // Add starttime
+			$updater->addExtensionUpdate( array( 'addField', 'poll', 'end', "$base/archives/patch-end.sql", true ) ); // Add end
 		
 			// "poll_answer"-Table: The answer of the users
 			$updater->addExtensionUpdate( array( 'addTable', 'poll_answer', "$base/archives/Poll-answer.sql", true ) ); // Initial answer tables
