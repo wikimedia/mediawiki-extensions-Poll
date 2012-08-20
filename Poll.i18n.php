@@ -111,7 +111,6 @@ $messages['de'] = array(
 	'poll-change' => 'Umfrage ändern',
 	'poll-delete' => 'Umfrage löschen',
 	'poll-title-change' => 'Umfrage ändern',
-	'poll-title-delete' => 'Umfrage löschen',
 	'poll-change-right-error' => 'Du musst der Autor dieser Umfrage sein oder die "poll-admin"-Gruppenberechtigung haben, um diese Umfrage zu ändern',
 	'poll-change-pass' => 'Umfrage erfolgreich geändert!',
 	'poll-number-poll' => 'Anzahl der abgegebenen Stimmen',
