@@ -806,4 +806,8 @@ class Poll extends SpecialPage {
 
 		return $s;
 	}
+
+	protected function getGroupName() {
+		return 'other';
+	}
 }
