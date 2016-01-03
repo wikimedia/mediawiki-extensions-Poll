@@ -524,7 +524,7 @@ class Poll extends SpecialPage {
 				$alternative_6 = ( $requestObject->getVal( 'poll_alternative_6' ) != "" ) ? $requestObject->getVal( 'poll_alternative_6' ) : "";
 				$alternative_6 = preg_replace( "#\[\[#", "", $alternative_6 );
 				$alternative_6 = preg_replace( "#\]\]#", "", $alternative_6 );
-				$dis = ( $requestObject->getVal( 'dis' ) != "" ) ? $requestObject->getVal( 'dis' ) : wfMsg( 'poll-no-dis' );
+				$dis = ( $requestObject->getVal( 'dis' ) != "" ) ? $requestObject->getVal( 'dis' ) : $this->msg( 'poll-no-dis' )->text();
 				$multi = ( $requestObject->getVal( 'allow_more' ) == 1 ) ? 1 : 0;
 				$user = $userObject->getName();
 				$ip = ( $requestObject->getVal( 'allow_ip' ) == 1 ) ? 1 : 0;
@@ -696,7 +696,7 @@ class Poll extends SpecialPage {
 				$alternative_6 = ( $requestObject->getVal( 'poll_alternative_6' ) != "" ) ? $requestObject->getVal( 'poll_alternative_6' ) : "";
 				$alternative_6 = preg_replace( "#\[\[#", "", $alternative_6 );
 				$alternative_6 = preg_replace( "#\]\]#", "", $alternative_6 );
-				$dis = ( $requestObject->getVal( 'dis' ) != "" ) ? $requestObject->getVal( 'dis' ) : wfMsg( 'poll-no-dis' );
+				$dis = ( $requestObject->getVal( 'dis' ) != "" ) ? $requestObject->getVal( 'dis' ) : $this->msg( 'poll-no-dis' )->text();
 				$user = $userObject->getName();
 
 				$dbw->update( 'poll', array( 'question' => $question, 'alternative_1' => $alternative_1, 'alternative_2' => $alternative_2,
