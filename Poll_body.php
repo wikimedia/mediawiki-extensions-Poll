@@ -14,6 +14,10 @@ class Poll extends SpecialPage {
 		parent::__construct( 'Poll' );
 	}
 
+	public function doesWrites() {
+		return true;
+	}
+
 	public function execute( $par ) {
 		$requestObject = $this->getRequest();
 		$userObject = $this->getUser();
