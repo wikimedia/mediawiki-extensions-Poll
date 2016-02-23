@@ -57,7 +57,7 @@ $dir = dirname( __FILE__ ) . '/';
 
 // Infomation about the Special Page "Poll"
 $wgAutoloadClasses['Poll'] = $dir . 'Poll_body.php'; # Tell MediaWiki to load the extension body.
-$wgExtensionMessagesFiles['Poll'] = $dir . 'Poll.i18n.php';
+$wgMessagesDirs['Poll'] = __DIR__ . '/i18n';
 $wgExtensionMessagesFiles['PollAlias'] = $dir . 'Poll.alias.php';
 $wgSpecialPages['Poll'] = 'Poll'; # Let MediaWiki know about your new special page.
 
