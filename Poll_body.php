@@ -101,7 +101,7 @@ class Poll extends SpecialPage {
 	public function make_list() {
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll' )->text() );
+		$output->setPageTitle( wfMessage( 'poll' )->text() );
 
 		$dbr = wfGetDB( DB_SLAVE );
 		$query = $dbr->select( 'poll', 'question, dis, id', array( 'end' => 0 ) );
@@ -140,7 +140,7 @@ class Poll extends SpecialPage {
 	public function list_old( $page ) {
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll' )->text() );
+		$output->setPageTitle( wfMessage( 'poll' )->text() );
 
 		if ( $page > 1 ) {
 			$page *= 50;
@@ -184,7 +184,7 @@ class Poll extends SpecialPage {
 		$userObject = $this->getUser();
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll-title-create' )->text() );
+		$output->setPageTitle( wfMessage( 'poll-title-create' )->text() );
 
 		if ( !$userObject->isAllowed( 'poll-create' ) ) {
 			$output->addWikiMsg( 'poll-create-right-error' );
@@ -232,7 +232,7 @@ class Poll extends SpecialPage {
 		$userObject = $this->getUser();
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll-title-vote' )->text() );
+		$output->setPageTitle( wfMessage( 'poll-title-vote' )->text() );
 
 		if ( !$userObject->isAllowed( 'poll-vote' ) ) {
 			$output->addWikiMsg( 'poll-vote-right-error' );
@@ -314,7 +314,7 @@ class Poll extends SpecialPage {
 		$userObject = $this->getUser();
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll-title-score' )->text() );
+		$output->setPageTitle( wfMessage( 'poll-title-score' )->text() );
 
 		if ( !$userObject->isAllowed( 'poll-score' ) ) {
 			$output->addWikiMsg( 'poll-score-right-error' );
@@ -421,7 +421,7 @@ class Poll extends SpecialPage {
 	public function delete( $did ) {
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll-title-delete' )->text() );
+		$output->setPageTitle( wfMessage( 'poll-title-delete' )->text() );
 
 		$dbr = wfGetDB( DB_SLAVE );
 		$query = $dbr->select( 'poll', 'question', array( 'id' => $did ), __METHOD__ );
@@ -448,7 +448,7 @@ class Poll extends SpecialPage {
 	public function change( $cid ) {
 		$output = $this->getOutput();
 
-		$output->setPagetitle( wfMessage( 'poll-title-change' )->text() );
+		$output->setPageTitle( wfMessage( 'poll-title-change' )->text() );
 
 		$dbr = wfGetDB( DB_SLAVE );
 		$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, dis',
