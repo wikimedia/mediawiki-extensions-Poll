@@ -113,7 +113,7 @@ class Poll extends SpecialPage {
 			array(), array( 'action' => 'list_old' ) ) ) );
 		$output->addHtml( Html::closeElement( 'ul' ) );
 
-		$output->addWikiText( '== ' . wfMessage( 'poll-list-current' )->text() . ' ==' );
+		$this->outputWikiText( '== ' . wfMessage( 'poll-list-current' )->text() . ' ==' );
 
 		$tableRows = array();
 		$tableHeaders = array();
@@ -160,7 +160,7 @@ class Poll extends SpecialPage {
 			array(), array( 'action' => 'list' ) ) ) );
 		$output->addHtml( Html::closeElement( 'ul' ) );
 
-		$output->addWikiText( '== ' . wfMessage( 'poll-list-old' )->text() . ' ==' );
+		$this->outputWikiText( '== ' . wfMessage( 'poll-list-old' )->text() . ' ==' );
 
 		$tableRows = array();
 		$tableHeaders = array();
@@ -296,7 +296,7 @@ class Poll extends SpecialPage {
 
 			$output->addHtml( Html::Hidden( 'type', 'vote' ) );
 			$output->addHtml( Html::Hidden( 'multi', $multi ) );
-			$output->addWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
+			$this->outputWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
 
 			$output->addHtml( Xml::closeElement( 'form' ) );
 
@@ -411,7 +411,7 @@ class Poll extends SpecialPage {
 			}
 
 			$output->addHtml( self::buildTable( $tableRows, array(), $tableHeaders ) );
-			$output->addWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
+			$this->outputWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
 			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
 					array(), array( 'action' => 'list' ) ) );
 		}
@@ -809,6 +809,16 @@ class Poll extends SpecialPage {
 		$s .= Xml::closeElement( 'tr' );
 
 		return $s;
+	}
+
+	private function outputWikiText( $wikitext ) {
+		$output = $this->getOutput();
+		if ( method_exists( $output, 'addWikiTextAsInterface' ) ) {
+			// MW 1.32+
+			$output->addWikiTextAsInterface( $wikitext );
+		} else {
+			$output->addWikiText( $wikitext );
+		}
 	}
 
 	protected function getGroupName() {
