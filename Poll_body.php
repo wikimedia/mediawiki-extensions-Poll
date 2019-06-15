@@ -63,7 +63,7 @@ class Poll extends SpecialPage {
 	public function start() {
 		global $wgMiserMode;
 
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$dbw = wfGetDB( DB_MASTER );
 
 		$query_log = $dbr->select( 'poll_start_log', 'time', '', __METHOD__, array( 'ORDER BY' => 'time DESC', 'LIMIT' => '1' ) );
@@ -103,7 +103,7 @@ class Poll extends SpecialPage {
 
 		$output->setPageTitle( wfMessage( 'poll' )->text() );
 
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, dis, id', array( 'end' => 0 ) );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
@@ -150,7 +150,7 @@ class Poll extends SpecialPage {
 			$limit = '50';
 		}
 
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, dis, id', array( 'end' => 1 ), __METHOD__, array( 'ORDER BY' => 'id DESC', 'LIMIT' => $limit ) );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
@@ -240,7 +240,7 @@ class Poll extends SpecialPage {
 				array(), array( 'action' => 'list' ) ) );
 		}
 		else {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				array( 'id' => $vid ), __METHOD__ );
 
@@ -322,7 +322,7 @@ class Poll extends SpecialPage {
 				array(), array( 'action' => 'list' ) ) );
 		}
 		else {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				array( 'id' => $sid ), __METHOD__ );
 
@@ -423,7 +423,7 @@ class Poll extends SpecialPage {
 
 		$output->setPageTitle( wfMessage( 'poll-title-delete' )->text() );
 
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question', array( 'id' => $did ), __METHOD__ );
 
 		while ( $row = $dbr->fetchObject( $query ) ) {
@@ -450,7 +450,7 @@ class Poll extends SpecialPage {
 
 		$output->setPageTitle( wfMessage( 'poll-title-change' )->text() );
 
-		$dbr = wfGetDB( DB_SLAVE );
+		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, dis',
 			array( 'id' => $cid ), __METHOD__ );
 
@@ -564,7 +564,7 @@ class Poll extends SpecialPage {
 			}
 			else {
 				$dbw = wfGetDB( DB_MASTER );
-				$dbr = wfGetDB( DB_SLAVE );
+				$dbr = wfGetDB( DB_REPLICA );
 				$multi = $requestObject->getVal( 'multi' );
 				$uid = $userObject->getId();
 				$user = $userObject->getName();
@@ -664,7 +664,7 @@ class Poll extends SpecialPage {
 		}
 
 		if ( $type == 'change' ) {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater', array( 'id' => $pid ) );
 
 			while ( $row = $dbr->fetchObject( $query ) ) {
@@ -718,7 +718,7 @@ class Poll extends SpecialPage {
 		}
 
 		if ( $type == 'delete' ) {
-			$dbr = wfGetDB( DB_SLAVE );
+			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater, question', array( 'id' => $pid ) );
 
 			while ( $row = $dbr->fetchObject( $query ) ) {
