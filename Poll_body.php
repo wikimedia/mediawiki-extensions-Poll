@@ -491,7 +491,7 @@ class Poll extends SpecialPage {
 		}
 	}
 
-	// This fucntion execute the order of the other function
+	// This function execute the order of the other function
 	public function submit( $pid ) {
 		$requestObject = $this->getRequest();
 		$userObject = $this->getUser();
