@@ -6,14 +6,24 @@
  * @ingroup Extensions
  */
 
-$specialPageAliases = array();
+$specialPageAliases = [];
 
 /** English */
-$specialPageAliases['en'] = array(
-	'Poll' => array( 'Poll' ),
-);
+$specialPageAliases['en'] = [
+	'Poll' => [ 'Poll' ],
+];
 
-/** German(Deutsch) */
-$specialPageAliases['de'] = array(
-	'Poll' => array( 'Umfrage' ),
-);
+/** German (Deutsch) */
+$specialPageAliases['de'] = [
+	'Poll' => [ 'Umfrage' ],
+];
+
+/** Serbian Cyrillic (српски (ћирилица)) */
+$specialPageAliases['sr-ec'] = [
+	'Poll' => [ 'Анкета', 'Гласање' ],
+];
+
+/** Serbian Latin (srpski (latinica)) */
+$specialPageAliases['sr-el'] = [
+	'Poll' => [ 'Anketa', 'Glasanje' ],
+];
