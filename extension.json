@@ -55,8 +55,8 @@
 		"PollAlias": "Poll.alias.php"
 	},
 	"AutoloadClasses": {
-		"Poll": "Poll_body.php",
-		"PollHooks": "PollHooks.php"
+		"Poll": "includes/Poll.php",
+		"PollHooks": "includes/PollHooks.php"
 	},
 	"Hooks": {
 		"LoadExtensionSchemaUpdates": "PollHooks::onPollSchemaUpdates"
