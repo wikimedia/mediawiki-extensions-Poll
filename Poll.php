@@ -10,7 +10,7 @@
  * @author Jan Luca <jan@toolserver.org>
  * @version 1.0 (Beta)
  * @link https://www.mediawiki.org/wiki/Extension:Poll2 Documentation
- * @license http://creativecommons.org/licenses/by-sa/3.0/ Attribution-Share Alike 3.0 Unported or later
+ * @license CC-BY-SA-3.0
  */
 
 if ( function_exists( 'wfLoadExtension' ) ) {
