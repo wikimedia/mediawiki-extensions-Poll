@@ -49,7 +49,7 @@
 	"poll-delete-cancel": "Error message if deletion was not successful because confirm-checkbox was not setted",
 	"poll-invalid-id": "Error message if poll id is unknown",
 	"poll-logpage": "Title of the poll-log",
-	"poll-logpagetext": "Desciption of the poll-log",
+	"poll-logpagetext": "Description of the poll-log",
 	"poll-logentry-create": "Create-logentry of the poll-log ($2: Name of poll, user name will be added by MW)",
 	"poll-logentry-change": "Change-logentry of the poll-log ($2: Name of poll, user name will be added by MW)",
 	"poll-logentry-delete": "Delete-logentry of the poll-log ($2: Name of poll, user name will be added by MW)",
