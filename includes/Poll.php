@@ -69,7 +69,7 @@ class Poll extends SpecialPage {
 		$dbw = wfGetDB( DB_MASTER );
 
 		$query_log = $dbr->select( 'poll_start_log', 'time', '', __METHOD__, [ 'ORDER BY' => 'time DESC', 'LIMIT' => '1' ] );
-		while ( $row = $dbr->fetchObject( $query_log ) ) {
+		foreach ( $query_log as $row ) {
 			$log_time = $row->time;
 		}
 		if ( !isset( $log_time ) || $log_time == "" ) {
@@ -91,7 +91,7 @@ class Poll extends SpecialPage {
 
 		$query = $dbr->select( 'poll', 'id, starttime, runtime' );
 
-		while ( $row = $dbr->fetchObject( $query ) ) {
+		foreach ( $query as $row ) {
 			$starttime = $row->starttime;
 			$runtime = $row->runtime;
 			$id = $row->id;
@@ -132,7 +132,7 @@ class Poll extends SpecialPage {
 		$tableHeaders[] = wfMessage( 'poll-dis' )->escaped();
 		$tableHeaders[] = '&#160;';
 
-		while ( $row = $dbr->fetchObject( $query ) ) {
+		foreach ( $query as $row ) {
 			$tableRow = [];
 			$tableRow[] = Linker::linkKnown( $this->getPageTitle(), htmlentities( $row->question, ENT_QUOTES, "UTF-8" ), [],
 				[ 'action' => 'vote', 'id' => $row->id ] );
@@ -179,7 +179,7 @@ class Poll extends SpecialPage {
 		$tableHeaders[] = wfMessage( 'poll-question' )->escaped();
 		$tableHeaders[] = wfMessage( 'poll-dis' )->escaped();
 
-		while ( $row = $dbr->fetchObject( $query ) ) {
+		foreach ( $query as $row ) {
 			$tableRow = [];
 			$tableRow[] = Linker::linkKnown( $this->getPageTitle(), htmlentities( $row->question, ENT_QUOTES, "UTF-8" ), [],
 				[ 'action' => 'score', 'id' => $row->id ] );
@@ -259,7 +259,7 @@ class Poll extends SpecialPage {
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				[ 'id' => $vid ], __METHOD__ );
 
-			while ( $row = $dbr->fetchObject( $query ) ) {
+			foreach ( $query as $row ) {
 				$question = htmlentities( $row->question, ENT_QUOTES, 'UTF-8' );
 				$alternative_1 = htmlentities( $row->alternative_1, ENT_QUOTES, 'UTF-8' );
 				$alternative_2 = htmlentities( $row->alternative_2, ENT_QUOTES, 'UTF-8' );
@@ -360,7 +360,7 @@ class Poll extends SpecialPage {
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				[ 'id' => $sid ], __METHOD__ );
 
-			while ( $row = $dbr->fetchObject( $query ) ) {
+			foreach ( $query as $row ) {
 				$question = htmlentities( $row->question, ENT_QUOTES, 'UTF-8' );
 				$alternative_1 = htmlentities( $row->alternative_1, ENT_QUOTES, 'UTF-8' );
 				$alternative_2 = htmlentities( $row->alternative_2, ENT_QUOTES, 'UTF-8' );
@@ -404,7 +404,7 @@ class Poll extends SpecialPage {
 				$query_num_6 = 0;
 
 				$query_multi = $dbr->select( 'poll_answer', 'vote', [ 'pid' => $sid ], __METHOD__ );
-				while ( $row = $dbr->fetchObject( $query_multi ) ) {
+				foreach ( $query_multi as $row ) {
 					$vote = $row->vote;
 					$vote = explode( "|", $vote );
 
@@ -431,7 +431,7 @@ class Poll extends SpecialPage {
 
 			$query_other = $dbr->select( 'poll_answer', 'vote_other', [ 'pid' => $sid, 'isset_vote_other' => 1 ], __METHOD__ );
 			$score_other = [];
-			while ( $row = $dbr->fetchObject( $query_other ) ) {
+			foreach ( $query_other as $row ) {
 				if ( !isset( $score_other[$row->vote_other]['first'] ) ) {
 					$score_other[$row->vote_other]['first'] = 0;
 					$score_other[$row->vote_other]['number'] = 1;
@@ -484,7 +484,7 @@ class Poll extends SpecialPage {
 		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question', [ 'id' => $did ], __METHOD__ );
 
-		while ( $row = $dbr->fetchObject( $query ) ) {
+		foreach ( $query as $row ) {
 			$question = htmlentities( $row->question, ENT_QUOTES, 'UTF-8' );
 		}
 
@@ -516,7 +516,7 @@ class Poll extends SpecialPage {
 		$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, dis',
 			[ 'id' => $cid ], __METHOD__ );
 
-		while ( $row = $dbr->fetchObject( $query ) ) {
+		foreach ( $query as $row ) {
 			$question = htmlentities( $row->question, ENT_QUOTES, 'UTF-8' );
 			$alternative_1 = htmlentities( $row->alternative_1, ENT_QUOTES, 'UTF-8' );
 			$alternative_2 = htmlentities( $row->alternative_2, ENT_QUOTES, 'UTF-8' );
@@ -632,7 +632,7 @@ class Poll extends SpecialPage {
 				$user = $userObject->getName();
 
 				$query_ip = $dbr->select( 'poll', 'ip', [ 'id' => $pid ], __METHOD__ );
-				while ( $row = $dbr->fetchObject( $query_ip ) ) {
+				foreach ( $query_ip as $row ) {
 					$ip = $row->ip;
 				}
 
@@ -724,7 +724,7 @@ class Poll extends SpecialPage {
 			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater', [ 'id' => $pid ] );
 
-			while ( $row = $dbr->fetchObject( $query ) ) {
+			foreach ( $query as $row ) {
 				$creater = htmlentities( $row->creater, ENT_QUOTES, 'UTF-8' );
 			}
 
@@ -778,7 +778,7 @@ class Poll extends SpecialPage {
 			$dbr = wfGetDB( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater, question', [ 'id' => $pid ] );
 
-			while ( $row = $dbr->fetchObject( $query ) ) {
+			foreach ( $query as $row ) {
 				$creater = htmlentities( $row->creater, ENT_QUOTES, 'UTF-8' );
 				$question = $row->question;
 			}
