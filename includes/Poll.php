@@ -33,7 +33,7 @@ class Poll extends SpecialPage {
 		$page = htmlentities( $requestObject->getText( 'page', 1 ) );
 
 		# Blocked users can't use this except to list
-		if ( $userObject->isBlocked() && $action != 'list' ) {
+		if ( $userObject->getBlock() && $action != 'list' ) {
 			$output->addWikiMsg( 'poll-create-block-error' );
 			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(), [], [ 'action' => 'list' ] ) );
 			return;
