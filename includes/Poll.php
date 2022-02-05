@@ -387,12 +387,12 @@ class Poll extends SpecialPage {
 				$query_5 = $dbr->select( 'poll_answer', 'uid', [ 'vote' => '5', 'pid' => $sid ], __METHOD__ );
 				$query_6 = $dbr->select( 'poll_answer', 'uid', [ 'vote' => '6', 'pid' => $sid ], __METHOD__ );
 
-				$query_num_1 = $dbr->numRows( $query_1 );
-				$query_num_2 = $dbr->numRows( $query_2 );
-				$query_num_3 = $dbr->numRows( $query_3 );
-				$query_num_4 = $dbr->numRows( $query_4 );
-				$query_num_5 = $dbr->numRows( $query_5 );
-				$query_num_6 = $dbr->numRows( $query_6 );
+				$query_num_1 = $query_1->numRows();
+				$query_num_2 = $query_2->numRows();
+				$query_num_3 = $query_3->numRows();
+				$query_num_4 = $query_4->numRows();
+				$query_num_5 = $query_5->numRows();
+				$query_num_6 = $query_6->numRows();
 			}
 
 			if ( $multi == 1 ) {
@@ -645,10 +645,10 @@ class Poll extends SpecialPage {
 
 				if ( $ip == 1 ) {
 					$query = $dbr->select( 'poll_answer', 'uid', [ 'uid' => $uid, 'pid' => $pid, 'ip' => $user ] );
-					$num = $dbr->numRows( $query );
+					$num = $query->numRows();
 				} else {
 					$query = $dbr->select( 'poll_answer', 'uid', [ 'uid' => $uid, 'pid' => $pid ] );
-					$num = $dbr->numRows( $query );
+					$num = $query->numRows();
 				}
 
 				if ( $multi != 1 ) {
