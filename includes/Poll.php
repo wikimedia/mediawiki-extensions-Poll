@@ -35,7 +35,7 @@ class Poll extends SpecialPage {
 		# Blocked users can't use this except to list
 		if ( $userObject->getBlock() && $action != 'list' ) {
 			$output->addWikiMsg( 'poll-create-block-error' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(), [], [ 'action' => 'list' ] ) );
+			$output->addHtml( $this->getLinkRenderer()->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(), [], [ 'action' => 'list' ] ) );
 			return;
 		}
 
@@ -110,16 +110,17 @@ class Poll extends SpecialPage {
 	 */
 	public function make_list() {
 		$output = $this->getOutput();
-
 		$output->setPageTitle( wfMessage( 'poll' )->text() );
+
+		$linkRenderer = $this->getLinkRenderer();
 
 		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, dis, id', [ 'end' => 0 ] );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
-		$output->addHtml( Html::rawElement( 'li', [], Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-create-link' )->escaped(),
+		$output->addHtml( Html::rawElement( 'li', [], $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-create-link' )->text(),
 			[], [ 'action' => 'create' ] ) ) );
-		$output->addHtml( Html::rawElement( 'li', [], Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-list-old' )->escaped(),
+		$output->addHtml( Html::rawElement( 'li', [], $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-list-old' )->text(),
 			[], [ 'action' => 'list_old' ] ) ) );
 		$output->addHtml( Html::closeElement( 'ul' ) );
 
@@ -134,10 +135,10 @@ class Poll extends SpecialPage {
 
 		foreach ( $query as $row ) {
 			$tableRow = [];
-			$tableRow[] = Linker::linkKnown( $this->getPageTitle(), htmlentities( $row->question, ENT_QUOTES, "UTF-8" ), [],
+			$tableRow[] = $linkRenderer->makeKnownLink( $this->getPageTitle(), $row->question, [],
 				[ 'action' => 'vote', 'id' => $row->id ] );
 			$tableRow[] = htmlentities( $row->dis, ENT_QUOTES, "UTF-8" );
-			$tableRow[] = Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-title-score' )->escaped(), [],
+			$tableRow[] = $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-title-score' )->text(), [],
 				[ 'action' => 'score', 'id' => $row->id ] );
 
 			$tableRows[] = $tableRow;
@@ -151,8 +152,9 @@ class Poll extends SpecialPage {
 	 */
 	public function list_old( $page ) {
 		$output = $this->getOutput();
-
 		$output->setPageTitle( wfMessage( 'poll' )->text() );
+
+		$linkRenderer = $this->getLinkRenderer();
 
 		if ( $page > 1 ) {
 			$page *= 50;
@@ -165,9 +167,9 @@ class Poll extends SpecialPage {
 		$query = $dbr->select( 'poll', 'question, dis, id', [ 'end' => 1 ], __METHOD__, [ 'ORDER BY' => 'id DESC', 'LIMIT' => $limit ] );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
-		$output->addHtml( Html::rawElement( 'li', [], Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-create-link' )->escaped(),
+		$output->addHtml( Html::rawElement( 'li', [], $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-create-link' )->text(),
 			[], [ 'action' => 'create' ] ) ) );
-		$output->addHtml( Html::rawElement( 'li', [], Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-list-current' )->escaped(),
+		$output->addHtml( Html::rawElement( 'li', [], $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-list-current' )->text(),
 			[], [ 'action' => 'list' ] ) ) );
 		$output->addHtml( Html::closeElement( 'ul' ) );
 
@@ -181,7 +183,7 @@ class Poll extends SpecialPage {
 
 		foreach ( $query as $row ) {
 			$tableRow = [];
-			$tableRow[] = Linker::linkKnown( $this->getPageTitle(), htmlentities( $row->question, ENT_QUOTES, "UTF-8" ), [],
+			$tableRow[] = $linkRenderer->makeKnownLink( $this->getPageTitle(), $row->question, [],
 				[ 'action' => 'score', 'id' => $row->id ] );
 			$tableRow[] = htmlentities( $row->dis, ENT_QUOTES, "UTF-8" );
 		}
@@ -200,7 +202,7 @@ class Poll extends SpecialPage {
 
 		if ( !$userObject->isAllowed( 'poll-create' ) ) {
 			$output->addWikiMsg( 'poll-create-right-error' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $this->getLinkRenderer()->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		} else {
 			$user = $userObject->getID();
@@ -247,12 +249,13 @@ class Poll extends SpecialPage {
 	public function vote( $vid ) {
 		$userObject = $this->getUser();
 		$output = $this->getOutput();
-
 		$output->setPageTitle( wfMessage( 'poll-title-vote' )->text() );
+
+		$linkRenderer = $this->getLinkRenderer();
 
 		if ( !$userObject->isAllowed( 'poll-vote' ) ) {
 			$output->addWikiMsg( 'poll-vote-right-error' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		} else {
 			$dbr = wfGetDB( DB_REPLICA );
@@ -273,7 +276,7 @@ class Poll extends SpecialPage {
 
 			if ( !isset( $question ) || $question == "" ) {
 				$output->addWikiMsg( 'poll-invalid-id' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 				return;
 			}
@@ -320,8 +323,8 @@ class Poll extends SpecialPage {
 				$tableRows[] = [ Xml::inputLabel( wfMessage( 'poll-vote-other' )->escaped(), 'vote_other', 'vote_other' ) ];
 			}
 
-			$tableRows[] = [ Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' . Linker::linkKnown( $this->getPageTitle(),
-				wfMessage( 'poll-title-score' )->escaped(), [], [ 'action' => 'score', 'id' => $vid ] ) ];
+			$tableRows[] = [ Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' . $linkRenderer->makeKnownLink( $this->getPageTitle(),
+				wfMessage( 'poll-title-score' )->text(), [], [ 'action' => 'score', 'id' => $vid ] ) ];
 
 			$output->addHtml( self::buildTable( $tableRows, [], $tableHeaders ) );
 
@@ -332,9 +335,9 @@ class Poll extends SpecialPage {
 			$output->addHtml( Xml::closeElement( 'form' ) );
 
 			if ( $userObject->isAllowed( 'poll-admin' ) || ( $creater == $userObject->getName() ) ) {
-				$output->addHtml( wfMessage( 'poll-administration' )->escaped() . '&#160;' . Linker::linkKnown( $this->getPageTitle(),
-					wfMessage( 'poll-change' )->escaped(), [], [ 'action' => 'change', 'id' => $vid ] ) . ' · ' .
-					Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-delete' )->escaped(), [],
+				$output->addHtml( wfMessage( 'poll-administration' )->escaped() . '&#160;' . $linkRenderer->makeKnownLink( $this->getPageTitle(),
+					wfMessage( 'poll-change' )->text(), [], [ 'action' => 'change', 'id' => $vid ] ) . ' · ' .
+					$linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-delete' )->text(), [],
 					[ 'action' => 'delete', 'id' => $vid ] ) );
 			}
 		}
@@ -348,12 +351,13 @@ class Poll extends SpecialPage {
 	public function score( $sid ) {
 		$userObject = $this->getUser();
 		$output = $this->getOutput();
-
 		$output->setPageTitle( wfMessage( 'poll-title-score' )->text() );
+
+		$linkRenderer = $this->getLinkRenderer();
 
 		if ( !$userObject->isAllowed( 'poll-score' ) ) {
 			$output->addWikiMsg( 'poll-score-right-error' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		} else {
 			$dbr = wfGetDB( DB_REPLICA );
@@ -374,7 +378,7 @@ class Poll extends SpecialPage {
 
 			if ( !isset( $question ) || $question == "" ) {
 				$output->addWikiMsg( 'poll-invalid-id' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 				return;
 			}
@@ -466,7 +470,7 @@ class Poll extends SpecialPage {
 
 			$output->addHtml( self::buildTable( $tableRows, [], $tableHeaders ) );
 			$this->outputWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 		}
 	}
@@ -478,8 +482,9 @@ class Poll extends SpecialPage {
 	 */
 	public function delete( $did ) {
 		$output = $this->getOutput();
-
 		$output->setPageTitle( wfMessage( 'poll-title-delete' )->text() );
+
+		$linkRenderer = $this->getLinkRenderer();
 
 		$dbr = wfGetDB( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question', [ 'id' => $did ], __METHOD__ );
@@ -492,12 +497,12 @@ class Poll extends SpecialPage {
 			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $did ) ] ) );
 			$output->addHtml( Xml::checkLabel( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete', 'controll_delete' ) . '<br />' ); # text() because Xml::element escapes another time
 			$output->addHtml( Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' .
-				Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(), [], [ 'action' => 'list' ] ) );
+				$linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(), [], [ 'action' => 'list' ] ) );
 			$output->addHtml( Html::Hidden( 'type', 'delete' ) );
 			$output->addHtml( Xml::closeElement( 'form' ) );
 		} else {
 			$output->addWikiMsg( 'poll-invalid-id' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		}
 	}
@@ -530,7 +535,7 @@ class Poll extends SpecialPage {
 
 		if ( !isset( $question ) || $question == "" ) {
 			$output->addWikiMsg( 'poll-invalid-id' );
-			$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+			$output->addHtml( $this->getLinkRenderer()->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 			return;
 		} else {
@@ -564,10 +569,12 @@ class Poll extends SpecialPage {
 
 		$type = $requestObject->getVal( 'type' );
 
+		$linkRenderer = $this->getLinkRenderer();
+
 		if ( $type == 'create' ) {
 			if ( !$userObject->isAllowed( 'poll-create' ) ) {
 				$output->addWikiMsg( 'poll-create-right-error' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
 				$dbw = wfGetDB( DB_MASTER );
@@ -609,11 +616,11 @@ class Poll extends SpecialPage {
 					$log->addEntry( "create", $title, "", [ htmlentities( $question, ENT_QUOTES, 'UTF-8' ) ], $userObject );
 
 					$output->addWikiMsg( 'poll-create-pass' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				} else {
 					$output->addWikiMsg( 'poll-create-fields-error' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				}
 			}
@@ -622,7 +629,7 @@ class Poll extends SpecialPage {
 		if ( $type == 'vote' ) {
 			if ( !$userObject->isAllowed( 'poll-vote' ) ) {
 				$output->addWikiMsg( 'poll-vote-right-error' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
 				$dbw = wfGetDB( DB_MASTER );
@@ -638,7 +645,7 @@ class Poll extends SpecialPage {
 
 				if ( $uid == 0 && $ip == 0 ) {
 					$output->addWikiMsg( 'poll-ip-error' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 					return;
 				}
@@ -683,7 +690,7 @@ class Poll extends SpecialPage {
 
 				if ( $vote == "err001" ) {
 					$output->addWikiMsg( 'poll-vote-empty-error' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 
 					return;
@@ -704,7 +711,7 @@ class Poll extends SpecialPage {
 					}
 
 					$output->addWikiMsg( 'poll-vote-pass' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				} else {
 					if ( $ip == 1 && $uid == 0 ) {
@@ -714,7 +721,7 @@ class Poll extends SpecialPage {
 						$dbw->update( 'poll_answer', [ 'vote' => $vote, 'isset_vote_other' => $isset_vote_other, 'vote_other' => $vote_other ], [ 'uid' => $uid, 'pid' => $pid ] );
 					}
 					$output->addWikiMsg( 'poll-vote-changed' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				}
 			}
@@ -730,7 +737,7 @@ class Poll extends SpecialPage {
 
 			if ( ( $creater != $userObject->getName() ) && !$userObject->isAllowed( 'poll-admin' ) ) {
 				$output->addWikiMsg( 'poll-change-right-error' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 				return;
 			}
@@ -769,7 +776,7 @@ class Poll extends SpecialPage {
 				$log->addEntry( "change", $title, "", [ htmlentities( $question, ENT_QUOTES, 'UTF-8' ) ], $userObject );
 
 				$output->addWikiMsg( 'poll-change-pass' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			}
 		}
@@ -785,7 +792,7 @@ class Poll extends SpecialPage {
 
 			if ( ( $creater != $userObject->getName() ) && !$userObject->isAllowed( 'poll-admin' ) ) {
 				$output->addWikiMsg( 'poll-delete-right-error' );
-				$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 				return;
 			}
@@ -802,11 +809,11 @@ class Poll extends SpecialPage {
 
 					$output->addWikiMsg( 'poll-delete-pass' );
 
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				} else {
 					$output->addWikiMsg( 'poll-delete-cancel' );
-					$output->addHtml( Linker::linkKnown( $this->getPageTitle(), wfMessage( 'poll-back' )->escaped(),
+					$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 						[], [ 'action' => 'list' ] ) );
 				}
 			}
