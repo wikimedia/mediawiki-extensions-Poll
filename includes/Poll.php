@@ -66,7 +66,7 @@ class Poll extends SpecialPage {
 		global $wgMiserMode;
 
 		$dbr = wfGetDB( DB_REPLICA );
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 
 		$query_log = $dbr->select( 'poll_start_log', 'time', '', __METHOD__, [ 'ORDER BY' => 'time DESC', 'LIMIT' => '1' ] );
 		foreach ( $query_log as $row ) {
@@ -577,7 +577,7 @@ class Poll extends SpecialPage {
 				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
-				$dbw = wfGetDB( DB_MASTER );
+				$dbw = wfGetDB( DB_PRIMARY );
 				$question = $requestObject->getVal( 'question' );
 				$question = preg_replace( "#\[\[#", "", $question );
 				$question = preg_replace( "#\]\]#", "", $question );
@@ -632,7 +632,7 @@ class Poll extends SpecialPage {
 				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
-				$dbw = wfGetDB( DB_MASTER );
+				$dbw = wfGetDB( DB_PRIMARY );
 				$dbr = wfGetDB( DB_REPLICA );
 				$multi = $requestObject->getVal( 'multi' );
 				$uid = $userObject->getId();
@@ -742,7 +742,7 @@ class Poll extends SpecialPage {
 				return;
 			}
 			if ( ( $creater == $userObject->getName() ) || $userObject->isAllowed( 'poll-admin' ) ) {
-				$dbw = wfGetDB( DB_MASTER );
+				$dbw = wfGetDB( DB_PRIMARY );
 				$question = $requestObject->getVal( 'question' );
 				$question = preg_replace( "#\[\[#", "", $question );
 				$question = preg_replace( "#\]\]#", "", $question );
@@ -798,7 +798,7 @@ class Poll extends SpecialPage {
 			}
 			if ( ( $creater == $userObject->getName() ) || $userObject->isAllowed( 'poll-admin' ) ) {
 				if ( $requestObject->getCheck( 'controll_delete' ) && $requestObject->getVal( 'controll_delete' ) == 1 ) {
-					$dbw = wfGetDB( DB_MASTER );
+					$dbw = wfGetDB( DB_PRIMARY );
 
 					$dbw->delete( 'poll', [ 'id' => $pid ] );
 					$dbw->delete( 'poll_answer', [ 'uid' => $pid ] );
