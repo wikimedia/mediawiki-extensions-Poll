@@ -7,6 +7,8 @@
  * @license CC-BY-SA-3.0
  */
 
+use MediaWiki\MediaWikiServices;
+
 class Poll extends SpecialPage {
 
 	public function __construct() {
@@ -65,8 +67,9 @@ class Poll extends SpecialPage {
 	public function start() {
 		global $wgMiserMode;
 
-		$dbr = wfGetDB( DB_REPLICA );
-		$dbw = wfGetDB( DB_PRIMARY );
+		$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
+		$dbr = $lb->getConnection( DB_REPLICA );
+		$dbw = $lb->getConnection( DB_PRIMARY );
 
 		$query_log = $dbr->select( 'poll_start_log', 'time', '', __METHOD__, [ 'ORDER BY' => 'time DESC', 'LIMIT' => '1' ] );
 		foreach ( $query_log as $row ) {
@@ -114,7 +117,7 @@ class Poll extends SpecialPage {
 
 		$linkRenderer = $this->getLinkRenderer();
 
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, dis, id', [ 'end' => 0 ] );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
@@ -163,7 +166,7 @@ class Poll extends SpecialPage {
 			$limit = '50';
 		}
 
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, dis, id', [ 'end' => 1 ], __METHOD__, [ 'ORDER BY' => 'id DESC', 'LIMIT' => $limit ] );
 
 		$output->addHtml( Html::openElement( 'ul' ) );
@@ -258,7 +261,7 @@ class Poll extends SpecialPage {
 			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		} else {
-			$dbr = wfGetDB( DB_REPLICA );
+			$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				[ 'id' => $vid ], __METHOD__ );
 
@@ -360,7 +363,7 @@ class Poll extends SpecialPage {
 			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 				[], [ 'action' => 'list' ] ) );
 		} else {
-			$dbr = wfGetDB( DB_REPLICA );
+			$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, multi',
 				[ 'id' => $sid ], __METHOD__ );
 
@@ -486,7 +489,7 @@ class Poll extends SpecialPage {
 
 		$linkRenderer = $this->getLinkRenderer();
 
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question', [ 'id' => $did ], __METHOD__ );
 
 		foreach ( $query as $row ) {
@@ -517,7 +520,7 @@ class Poll extends SpecialPage {
 
 		$output->setPageTitle( wfMessage( 'poll-title-change' )->text() );
 
-		$dbr = wfGetDB( DB_REPLICA );
+		$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 		$query = $dbr->select( 'poll', 'question, alternative_1, alternative_2, alternative_3, alternative_4, alternative_5, alternative_6, creater, dis',
 			[ 'id' => $cid ], __METHOD__ );
 
@@ -577,7 +580,7 @@ class Poll extends SpecialPage {
 				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
-				$dbw = wfGetDB( DB_PRIMARY );
+				$dbw = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
 				$question = $requestObject->getVal( 'question' );
 				$question = preg_replace( "#\[\[#", "", $question );
 				$question = preg_replace( "#\]\]#", "", $question );
@@ -632,8 +635,9 @@ class Poll extends SpecialPage {
 				$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
 					[], [ 'action' => 'list' ] ) );
 			} else {
-				$dbw = wfGetDB( DB_PRIMARY );
-				$dbr = wfGetDB( DB_REPLICA );
+				$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
+				$dbw = $lb->getConnection( DB_PRIMARY );
+				$dbr = $lb->getConnection( DB_REPLICA );
 				$multi = $requestObject->getVal( 'multi' );
 				$uid = $userObject->getId();
 				$user = $userObject->getName();
@@ -728,7 +732,7 @@ class Poll extends SpecialPage {
 		}
 
 		if ( $type == 'change' ) {
-			$dbr = wfGetDB( DB_REPLICA );
+			$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater', [ 'id' => $pid ] );
 
 			foreach ( $query as $row ) {
@@ -742,7 +746,7 @@ class Poll extends SpecialPage {
 				return;
 			}
 			if ( ( $creater == $userObject->getName() ) || $userObject->isAllowed( 'poll-admin' ) ) {
-				$dbw = wfGetDB( DB_PRIMARY );
+				$dbw = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
 				$question = $requestObject->getVal( 'question' );
 				$question = preg_replace( "#\[\[#", "", $question );
 				$question = preg_replace( "#\]\]#", "", $question );
@@ -782,7 +786,7 @@ class Poll extends SpecialPage {
 		}
 
 		if ( $type == 'delete' ) {
-			$dbr = wfGetDB( DB_REPLICA );
+			$dbr = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_REPLICA );
 			$query = $dbr->select( 'poll', 'creater, question', [ 'id' => $pid ] );
 
 			foreach ( $query as $row ) {
@@ -798,7 +802,7 @@ class Poll extends SpecialPage {
 			}
 			if ( ( $creater == $userObject->getName() ) || $userObject->isAllowed( 'poll-admin' ) ) {
 				if ( $requestObject->getCheck( 'controll_delete' ) && $requestObject->getVal( 'controll_delete' ) == 1 ) {
-					$dbw = wfGetDB( DB_PRIMARY );
+					$dbw = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
 
 					$dbw->delete( 'poll', [ 'id' => $pid ] );
 					$dbw->delete( 'poll_answer', [ 'uid' => $pid ] );
