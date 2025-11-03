@@ -7,6 +7,7 @@
  * @license CC-BY-SA-3.0
  */
 
+use MediaWiki\Html\Html;
 use MediaWiki\MediaWikiServices;
 
 class Poll extends SpecialPage {
