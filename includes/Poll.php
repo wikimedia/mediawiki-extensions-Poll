@@ -239,7 +239,7 @@ class Poll extends SpecialPage {
 			$formFields['poll-create-allow-ip'] = Xml::check( 'allow_ip', $ip_checked );
 
 			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
-			$output->addHtml( Html::Hidden( 'type', 'create' ) );
+			$output->addHtml( Html::hidden( 'type', 'create' ) );
 
 			$output->addHtml( Xml::closeElement( 'form' ) );
 		}
@@ -332,8 +332,8 @@ class Poll extends SpecialPage {
 
 			$output->addHtml( self::buildTable( $tableRows, [], $tableHeaders ) );
 
-			$output->addHtml( Html::Hidden( 'type', 'vote' ) );
-			$output->addHtml( Html::Hidden( 'multi', $multi ) );
+			$output->addHtml( Html::hidden( 'type', 'vote' ) );
+			$output->addHtml( Html::hidden( 'multi', $multi ) );
 			$this->outputWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
 
 			$output->addHtml( Xml::closeElement( 'form' ) );
@@ -502,7 +502,7 @@ class Poll extends SpecialPage {
 			$output->addHtml( Xml::checkLabel( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete', 'controll_delete' ) . '<br />' ); # text() because Xml::element escapes another time
 			$output->addHtml( Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' .
 				$linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(), [], [ 'action' => 'list' ] ) );
-			$output->addHtml( Html::Hidden( 'type', 'delete' ) );
+			$output->addHtml( Html::hidden( 'type', 'delete' ) );
 			$output->addHtml( Xml::closeElement( 'form' ) );
 		} else {
 			$output->addWikiMsg( 'poll-invalid-id' );
@@ -556,7 +556,7 @@ class Poll extends SpecialPage {
 			$formFields['poll-dis'] = Xml::textarea( 'dis', $dis );
 
 			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
-			$output->addHtml( Html::Hidden( 'type', 'change' ) );
+			$output->addHtml( Html::hidden( 'type', 'change' ) );
 			$output->addHtml( Xml::closeElement( 'form' ) );
 		}
 	}
