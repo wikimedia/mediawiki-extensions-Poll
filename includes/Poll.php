@@ -226,17 +226,17 @@ class Poll extends SpecialPage {
 			$runtimeSelect->addOption( wfMessage( 'poll-runtime-3-weeks' )->escaped(), 1814400 );
 			$runtimeSelect->addOption( wfMessage( 'poll-runtime-4-weeks' )->escaped(), 2419200 );
 
-			$formFields['poll-question'] = Xml::input( 'question' );
-			$formFields['poll-option1'] = Xml::input( 'poll_alternative_1' );
-			$formFields['poll-option2'] = Xml::input( 'poll_alternative_2' );
-			$formFields['poll-option3'] = Xml::input( 'poll_alternative_3' );
-			$formFields['poll-option4'] = Xml::input( 'poll_alternative_4' );
-			$formFields['poll-option5'] = Xml::input( 'poll_alternative_5' );
-			$formFields['poll-option6'] = Xml::input( 'poll_alternative_6' );
-			$formFields['poll-dis'] = Xml::textarea( 'dis', '' );
+			$formFields['poll-question'] = Html::input( 'question' );
+			$formFields['poll-option1'] = Html::input( 'poll_alternative_1' );
+			$formFields['poll-option2'] = Html::input( 'poll_alternative_2' );
+			$formFields['poll-option3'] = Html::input( 'poll_alternative_3' );
+			$formFields['poll-option4'] = Html::input( 'poll_alternative_4' );
+			$formFields['poll-option5'] = Html::input( 'poll_alternative_5' );
+			$formFields['poll-option6'] = Html::input( 'poll_alternative_6' );
+			$formFields['poll-dis'] = Html::textarea( 'dis', '', [ 'id' => 'dis' ] );
 			$formFields['poll-runtime'] = $runtimeSelect->getHTML();
-			$formFields['poll-create-allow-more'] = Xml::check( 'allow_more' );
-			$formFields['poll-create-allow-ip'] = Xml::check( 'allow_ip', $ip_checked );
+			$formFields['poll-create-allow-more'] = Html::check( 'allow_more' );
+			$formFields['poll-create-allow-ip'] = Html::check( 'allow_ip', $ip_checked );
 
 			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
 			$output->addHtml( Html::Hidden( 'type', 'create' ) );
@@ -293,41 +293,41 @@ class Poll extends SpecialPage {
 			$tableHeaders[] = $question;
 
 			if ( $multi != 1 ) {
-				$tableRows[] = [ Xml::radioLabel( $alternative_1, 'vote', '1', 'vote1' ) ];
-				$tableRows[] = [ Xml::radioLabel( $alternative_2, 'vote', '2', 'vote2' ) ];
+				$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '1', 'id' => 'vote1' ] ) . "\u{00A0}" . Html::label( $alternative_1, 'vote1' ) ];
+				$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '2', 'id' => 'vote2' ] ) . "\u{00A0}" . Html::label( $alternative_2, 'vote2' ) ];
 				if ( $alternative_3 != "" ) {
-					$tableRows[] = [ Xml::radioLabel( $alternative_3, 'vote', '3', 'vote3' ) ];
+					$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '3', 'id' => 'vote3' ] ) . "\u{00A0}" . Html::label( $alternative_3, 'vote3' ) ];
 				}
 				if ( $alternative_4 != "" ) {
-					$tableRows[] = [ Xml::radioLabel( $alternative_4, 'vote', '4', 'vote4' ) ];
+					$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '4', 'id' => 'vote4' ] ) . "\u{00A0}" . Html::label( $alternative_4, 'vote4' ) ];
 				}
 				if ( $alternative_5 != "" ) {
-					$tableRows[] = [ Xml::radioLabel( $alternative_5, 'vote', '5', 'vote5' ) ];
+					$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '5', 'id' => 'vote5' ] ) . "\u{00A0}" . Html::label( $alternative_5, 'vote5' ) ];
 				}
 				if ( $alternative_6 != "" ) {
-					$tableRows[] = [ Xml::radioLabel( $alternative_6, 'vote', '6', 'vote6' ) ];
+					$tableRows[] = [ Html::radio( 'vote', false, [ 'value' => '6', 'id' => 'vote6' ] ) . "\u{00A0}" . Html::label( $alternative_6, 'vote6' ) ];
 				}
-				$tableRows[] = [ Xml::inputLabel( wfMessage( 'poll-vote-other' )->escaped(), 'vote_other', 'vote_other' ) ];
+				$tableRows[] = [ Html::label( wfMessage( 'poll-vote-other' )->escaped(), 'vote_other' ) . "\u{00A0}" . Html::input( 'vote_other', '', 'text', [ 'id' => 'vote_other' ] ) ];
 			}
 			if ( $multi == 1 ) {
-				$tableRows[] = [ Xml::checkLabel( $alternative_1, 'vote_1', 'vote_1' ) ];
-				$tableRows[] = [ Xml::checkLabel( $alternative_2, 'vote_2', 'vote_2' ) ];
+				$tableRows[] = [ Html::check( 'vote_1', false, [ 'id' => 'vote_1' ] ) . "\u{00A0}" . Html::label( $alternative_1, 'vote_1' ) ];
+				$tableRows[] = [ Html::check( 'vote_2', false, [ 'id' => 'vote_2' ] ) . "\u{00A0}" . Html::label( $alternative_2, 'vote_2' ) ];
 				if ( $alternative_3 != "" ) {
-					$tableRows[] = [ Xml::checkLabel( $alternative_3, 'vote_3', 'vote_3' ) ];
+					$tableRows[] = [ Html::check( 'vote_3', false, [ 'id' => 'vote_3' ] ) . "\u{00A0}" . Html::label( $alternative_3, 'vote_3' ) ];
 				}
 				if ( $alternative_4 != "" ) {
-					$tableRows[] = [ Xml::checkLabel( $alternative_4, 'vote_4', 'vote_4' ) ];
+					$tableRows[] = [ Html::check( 'vote_4', false, [ 'id' => 'vote_4' ] ) . "\u{00A0}" . Html::label( $alternative_4, 'vote_4' ) ];
 				}
 				if ( $alternative_5 != "" ) {
-					$tableRows[] = [ Xml::checkLabel( $alternative_5, 'vote_5', 'vote_5' ) ];
+					$tableRows[] = [ Html::check( 'vote_5', false, [ 'id' => 'vote_5' ] ) . "\u{00A0}" . Html::label( $alternative_5, 'vote_5' ) ];
 				}
 				if ( $alternative_6 != "" ) {
-					$tableRows[] = [ Xml::checkLabel( $alternative_6, 'vote_6', 'vote_6' ) ];
+					$tableRows[] = [ Html::check( 'vote_6', false, [ 'id' => 'vote_6' ] ) . "\u{00A0}" . Html::label( $alternative_6, 'vote_6' ) ];
 				}
-				$tableRows[] = [ Xml::inputLabel( wfMessage( 'poll-vote-other' )->escaped(), 'vote_other', 'vote_other' ) ];
+				$tableRows[] = [ Html::label( wfMessage( 'poll-vote-other' )->escaped(), 'vote_other' ) . "\u{00A0}" . Html::input( 'vote_other', '', 'text', [ 'id' => 'vote_other' ] ) ];
 			}
 
-			$tableRows[] = [ Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' . $linkRenderer->makeKnownLink( $this->getPageTitle(),
+			$tableRows[] = [ Html::submitButton( wfMessage( 'poll-submit' )->escaped(), [] ) . '&#160;' . $linkRenderer->makeKnownLink( $this->getPageTitle(),
 				wfMessage( 'poll-title-score' )->text(), [], [ 'action' => 'score', 'id' => $vid ] ) ];
 
 			$output->addHtml( self::buildTable( $tableRows, [], $tableHeaders ) );
@@ -499,8 +499,9 @@ class Poll extends SpecialPage {
 
 		if ( isset( $question ) && $question != "" ) {
 			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $did ) ] ) );
-			$output->addHtml( Xml::checkLabel( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete', 'controll_delete' ) . '<br />' ); # text() because Xml::element escapes another time
-			$output->addHtml( Xml::submitButton( wfMessage( 'poll-submit' )->escaped() ) . '&#160;' .
+			$output->addHtml( Html::check( 'controll_delete', false, [ 'id' => 'controll_delete' ] )
+				. "\u{00A0}" . Html::label( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete' ) . '<br />' ); # text() because Xml::element escapes another time
+			$output->addHtml( Html::submitButton( wfMessage( 'poll-submit' )->escaped(), [] ) . '&#160;' .
 				$linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(), [], [ 'action' => 'list' ] ) );
 			$output->addHtml( Html::Hidden( 'type', 'delete' ) );
 			$output->addHtml( Xml::closeElement( 'form' ) );
@@ -546,14 +547,14 @@ class Poll extends SpecialPage {
 			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $cid ) ] ) );
 
 			$formFields = [];
-			$formFields['poll-question'] = Xml::input( 'question', false, $question );
-			$formFields['poll-option1'] = Xml::input( 'poll_alternative_1', false, $alternative_1 );
-			$formFields['poll-option2'] = Xml::input( 'poll_alternative_2', false, $alternative_2 );
-			$formFields['poll-option3'] = Xml::input( 'poll_alternative_3', false, $alternative_3 );
-			$formFields['poll-option4'] = Xml::input( 'poll_alternative_4', false, $alternative_4 );
-			$formFields['poll-option5'] = Xml::input( 'poll_alternative_5', false, $alternative_5 );
-			$formFields['poll-option6'] = Xml::input( 'poll_alternative_6', false, $alternative_6 );
-			$formFields['poll-dis'] = Xml::textarea( 'dis', $dis );
+			$formFields['poll-question'] = Html::input( 'question', $question );
+			$formFields['poll-option1'] = Html::input( 'poll_alternative_1', $alternative_1 );
+			$formFields['poll-option2'] = Html::input( 'poll_alternative_2', $alternative_2 );
+			$formFields['poll-option3'] = Html::input( 'poll_alternative_3', $alternative_3 );
+			$formFields['poll-option4'] = Html::input( 'poll_alternative_4', $alternative_4 );
+			$formFields['poll-option5'] = Html::input( 'poll_alternative_5', $alternative_5 );
+			$formFields['poll-option6'] = Html::input( 'poll_alternative_6', $alternative_6 );
+			$formFields['poll-dis'] = Html::textarea( 'dis', $dis, [ 'id' => 'dis' ] );
 
 			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
 			$output->addHtml( Html::Hidden( 'type', 'change' ) );
@@ -826,8 +827,6 @@ class Poll extends SpecialPage {
 	}
 
 	/**
-	 * Copy of Xml::buildTable but without escaping the values.
-	 *
 	 * @param array[] $rows
 	 * @param array $attribs
 	 * @param string[]|null $headers
@@ -867,8 +866,6 @@ class Poll extends SpecialPage {
 	}
 
 	/**
-	 * Copy of Xml::buildTableRow but without escaping the values.
-	 *
 	 * @param array $attribs
 	 * @param string[] $cells
 	 * @return string
