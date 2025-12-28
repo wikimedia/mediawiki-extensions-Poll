@@ -215,7 +215,7 @@ class Poll extends SpecialPage {
 
 			$formFields = [];
 
-			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit' ) ] ) );
+			$output->addHtml( Html::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit' ) ] ) );
 
 			$runtimeSelect = new XmlSelect( 'runtime', 'runtime' );
 			$runtimeSelect->setAttribute( 'size', '1' );
@@ -238,10 +238,10 @@ class Poll extends SpecialPage {
 			$formFields['poll-create-allow-more'] = Html::check( 'allow_more' );
 			$formFields['poll-create-allow-ip'] = Html::check( 'allow_ip', $ip_checked );
 
-			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
+			$output->addHtml( self::buildForm( $formFields, 'poll-submit' ) );
 			$output->addHtml( Html::hidden( 'type', 'create' ) );
 
-			$output->addHtml( Xml::closeElement( 'form' ) );
+			$output->addHtml( Html::closeElement( 'form' ) );
 		}
 	}
 
@@ -285,7 +285,7 @@ class Poll extends SpecialPage {
 				return;
 			}
 
-			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $vid ) ] ) );
+			$output->addHtml( Html::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $vid ) ] ) );
 
 			$tableRows = [];
 			$tableHeaders = [];
@@ -336,7 +336,7 @@ class Poll extends SpecialPage {
 			$output->addHtml( Html::hidden( 'multi', $multi ) );
 			$this->outputWikiText( '<small>' . wfMessage( 'poll-score-created', $creater )->text() . '</small>' );
 
-			$output->addHtml( Xml::closeElement( 'form' ) );
+			$output->addHtml( Html::closeElement( 'form' ) );
 
 			if ( $userObject->isAllowed( 'poll-admin' ) || ( $creater == $userObject->getName() ) ) {
 				$output->addHtml( wfMessage( 'poll-administration' )->escaped() . '&#160;' . $linkRenderer->makeKnownLink( $this->getPageTitle(),
@@ -451,7 +451,7 @@ class Poll extends SpecialPage {
 			$tableRows = [];
 			$tableHeaders = [];
 
-			$tableHeaders[] = Xml::element( 'span', [ 'style' => 'text-align: center;' ], $question, false );
+			$tableHeaders[] = Html::element( 'span', [ 'style' => 'text-align: center;' ], $question, false );
 
 			$tableRows[] = [ $alternative_1, $query_num_1 ];
 			$tableRows[] = [ $alternative_2, $query_num_2 ];
@@ -498,13 +498,13 @@ class Poll extends SpecialPage {
 		}
 
 		if ( isset( $question ) && $question != "" ) {
-			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $did ) ] ) );
+			$output->addHtml( Html::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $did ) ] ) );
 			$output->addHtml( Html::check( 'controll_delete', false, [ 'id' => 'controll_delete' ] )
-				. "\u{00A0}" . Html::label( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete' ) . '<br />' ); # text() because Xml::element escapes another time
+				. "\u{00A0}" . Html::label( wfMessage( 'poll-delete-question', $question )->text(), 'controll_delete' ) . '<br />' ); # text() because Html::element escapes another time
 			$output->addHtml( Html::submitButton( wfMessage( 'poll-submit' )->escaped(), [] ) . '&#160;' .
 				$linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(), [], [ 'action' => 'list' ] ) );
 			$output->addHtml( Html::hidden( 'type', 'delete' ) );
-			$output->addHtml( Xml::closeElement( 'form' ) );
+			$output->addHtml( Html::closeElement( 'form' ) );
 		} else {
 			$output->addWikiMsg( 'poll-invalid-id' );
 			$output->addHtml( $linkRenderer->makeKnownLink( $this->getPageTitle(), wfMessage( 'poll-back' )->text(),
@@ -544,7 +544,7 @@ class Poll extends SpecialPage {
 				[], [ 'action' => 'list' ] ) );
 			return;
 		} else {
-			$output->addHtml( Xml::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $cid ) ] ) );
+			$output->addHtml( Html::openElement( 'form', [ 'method' => 'post', 'action' => $this->getPageTitle()->getFullURL( 'action=submit&id=' . $cid ) ] ) );
 
 			$formFields = [];
 			$formFields['poll-question'] = Html::input( 'question', $question );
@@ -556,9 +556,9 @@ class Poll extends SpecialPage {
 			$formFields['poll-option6'] = Html::input( 'poll_alternative_6', $alternative_6 );
 			$formFields['poll-dis'] = Html::textarea( 'dis', $dis, [ 'id' => 'dis' ] );
 
-			$output->addHtml( Xml::buildForm( $formFields, 'poll-submit' ) );
+			$output->addHtml( self::buildForm( $formFields, 'poll-submit' ) );
 			$output->addHtml( Html::hidden( 'type', 'change' ) );
-			$output->addHtml( Xml::closeElement( 'form' ) );
+			$output->addHtml( Html::closeElement( 'form' ) );
 		}
 	}
 
@@ -833,10 +833,10 @@ class Poll extends SpecialPage {
 	 * @return string
 	 */
 	public static function buildTable( $rows, $attribs = [], $headers = null ) {
-		$s = Xml::openElement( 'table', $attribs );
+		$s = Html::openElement( 'table', $attribs );
 
 		if ( is_array( $headers ) ) {
-			$s .= Xml::openElement( 'thead', $attribs );
+			$s .= Html::openElement( 'thead', $attribs );
 
 			foreach ( $headers as $id => $header ) {
 				$attribs = [];
@@ -845,9 +845,9 @@ class Poll extends SpecialPage {
 					$attribs['id'] = $id;
 				}
 
-				$s .= Xml::openElement( 'th', $attribs ) . $header . Xml::closeElement( 'th' );
+				$s .= Html::openElement( 'th', $attribs ) . $header . Html::closeElement( 'th' );
 			}
-			$s .= Xml::closeElement( 'thead' );
+			$s .= Html::closeElement( 'thead' );
 		}
 
 		foreach ( $rows as $id => $row ) {
@@ -860,7 +860,7 @@ class Poll extends SpecialPage {
 			$s .= self::buildTableRow( $attribs, $row );
 		}
 
-		$s .= Xml::closeElement( 'table' );
+		$s .= Html::closeElement( 'table' );
 
 		return $s;
 	}
@@ -871,7 +871,7 @@ class Poll extends SpecialPage {
 	 * @return string
 	 */
 	public static function buildTableRow( $attribs, $cells ) {
-		$s = Xml::openElement( 'tr', $attribs );
+		$s = Html::openElement( 'tr', $attribs );
 
 		foreach ( $cells as $id => $cell ) {
 
@@ -881,12 +881,42 @@ class Poll extends SpecialPage {
 				$attribs['id'] = $id;
 			}
 
-			$s .= Xml::openElement( 'td', $attribs ) . $cell . Xml::closeElement( 'td' );
+			$s .= Html::openElement( 'td', $attribs ) . $cell . Html::closeElement( 'td' );
 		}
 
-		$s .= Xml::closeElement( 'tr' );
+		$s .= Html::closeElement( 'tr' );
 
 		return $s;
+	}
+
+	private static function buildForm( array $fields, string $submitLabel ): string {
+		$form = '';
+		$form .= "<table><tbody>";
+
+		foreach ( $fields as $labelmsg => $input ) {
+			$id = "mw-$labelmsg";
+			$form .= Html::openElement( 'tr', [ 'id' => $id ] );
+			$form .= Html::rawElement( 'td', [ 'class' => 'mw-label' ], wfMessage( $labelmsg )->parse() );
+			$form .= Html::openElement( 'td', [ 'class' => 'mw-input' ] ) . $input . Html::closeElement( 'td' );
+			$form .= Html::closeElement( 'tr' );
+		}
+
+		$form .= Html::openElement( 'tr' );
+		$form .= Html::element( 'td' );
+		$form .= Html::openElement( 'td', [ 'class' => 'mw-submit' ] )
+			. Html::element(
+				'input',
+				[
+					'type' => 'submit',
+					'value' => wfMessage( $submitLabel )->text(),
+				]
+			)
+			. Html::closeElement( 'td' );
+		$form .= Html::closeElement( 'tr' );
+
+		$form .= "</tbody></table>";
+
+		return $form;
 	}
 
 	/**
